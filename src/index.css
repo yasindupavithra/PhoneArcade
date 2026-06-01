@@ -1,0 +1,188 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --color-primary: #00aeef;
+  --color-primary-dark: #0096ce;
+  --color-secondary: #002d62;
+  --color-surface: #f8fafc;
+  --color-surface-elevated: #ffffff;
+  --color-muted: #64748b;
+  --color-border: #e2e8f0;
+  --color-border-strong: #cbd5e1;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --shadow-card: 0 4px 24px -4px rgba(0, 45, 98, 0.08);
+  --shadow-card-hover: 0 20px 40px -12px rgba(0, 45, 98, 0.15);
+  --shadow-search: 0 25px 50px -12px rgba(0, 45, 98, 0.2);
+  --radius-card: 1rem;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-white text-slate-900 font-sans antialiased;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+    @apply font-extrabold tracking-tight text-secondary;
+  }
+
+  a {
+    @apply transition-colors duration-200;
+  }
+
+  button {
+    @apply cursor-pointer transition-all duration-200;
+  }
+
+  img {
+    @apply max-w-full;
+  }
+}
+
+@layer components {
+  .container {
+    @apply mx-auto w-full max-w-[1320px] px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-padding {
+    @apply py-16 md:py-20 lg:py-24;
+  }
+
+  .section-title {
+    @apply text-center mb-12 md:mb-16;
+  }
+
+  .section-title h2 {
+    @apply text-3xl md:text-4xl font-black text-secondary uppercase tracking-tight mb-4;
+  }
+
+  .section-title .accent-line {
+    @apply w-20 h-1 bg-primary rounded-full mx-auto mb-4;
+  }
+
+  .section-title p {
+    @apply text-muted text-sm md:text-base font-medium uppercase tracking-[0.15em] max-w-xl mx-auto;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 bg-primary text-white font-bold uppercase tracking-wider text-sm px-8 py-4 rounded-full shadow-lg shadow-primary/25 hover:bg-primary-dark hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 bg-secondary text-white font-bold uppercase tracking-wider text-sm px-8 py-4 rounded-full hover:bg-secondary/90 hover:-translate-y-0.5;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 border-2 border-white/30 text-white font-bold uppercase tracking-wider text-sm px-8 py-4 rounded-full backdrop-blur-sm hover:bg-white/10;
+  }
+
+  .card-product {
+    @apply bg-white rounded-2xl border border-border overflow-hidden flex flex-col h-full transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1 hover:border-primary/20;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 rounded-xl border border-border bg-white text-secondary placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all;
+  }
+
+  .glass-panel {
+    @apply bg-white/80 backdrop-blur-xl border border-white/60 shadow-search;
+  }
+
+  .badge-new {
+    @apply inline-flex px-2.5 py-1 bg-secondary text-white text-[10px] font-black uppercase tracking-wider rounded-md;
+  }
+
+  .trust-card {
+    @apply flex items-center gap-4 p-5 rounded-2xl bg-white border border-border shadow-sm hover:shadow-md transition-shadow;
+  }
+
+  .nav-link {
+    @apply text-[13px] font-bold text-secondary hover:text-primary relative py-1 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:after:w-full;
+  }
+
+  .announcement-bar {
+    @apply bg-gradient-to-r from-[#1e4fd6] via-[#2b64e3] to-[#1e4fd6] text-white text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em];
+  }
+
+  .brand-partners-grid {
+    @apply grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-5;
+  }
+
+  .brand-partner-card {
+    @apply relative flex flex-col items-center rounded-2xl md:rounded-3xl border border-border bg-white p-4 md:p-5 overflow-hidden;
+    @apply hover:border-primary/40 hover:shadow-card-hover hover:-translate-y-1.5 transition-all duration-300;
+    animation: fade-up 0.5s ease backwards;
+  }
+
+  .brand-partner-glow {
+    @apply absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500;
+  }
+
+  .brand-partner-inner {
+    @apply relative z-10 w-full aspect-[4/3] flex items-center justify-center rounded-xl bg-slate-50/80 border border-slate-100;
+  }
+
+  .brand-partner-label {
+    @apply relative z-10 mt-3 text-[10px] md:text-xs font-black uppercase tracking-wider text-muted group-hover:text-secondary transition-colors;
+  }
+
+  .brand-partner-all .brand-partner-inner {
+    @apply aspect-[4/3];
+  }
+
+  .trending-phone-item {
+    animation: fade-up 0.45s ease backwards;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@layer utilities {
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-slate-200 rounded-full;
+  }
+}
+
+/* Sticky header offset */
+.header-spacer {
+  height: 0;
+}
+.header-spacer.is-sticky {
+  @apply h-[104px] md:h-[120px];
+}

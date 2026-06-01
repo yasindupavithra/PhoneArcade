@@ -1,0 +1,9 @@
+{
+  "updatedAt": "2026-06-01T20:03:12.979Z",
+  "images": [
+    "/assets/1778218580424.png",
+    "/assets/1778218774816.png",
+    "/assets/Gemini_Generated_Image_l6fncxl6fncxl6fn.png"
+  ],
+  "hint": "Add images to public/assets/slider/ then run: npm run slider:sync"
+}
