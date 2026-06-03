@@ -2,7 +2,6 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
-import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCRzpKd_D8as1_zzOu3TUWSpAwLtxH0BIk",
@@ -17,17 +16,21 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 // Analytics can fail in some environments (privacy blocks, missing window, etc.).
-// Initialize it defensively so a failure doesn't break the whole app.
+// Load it dynamically so the import itself does not break the app.
 let analyticsInstance = null;
-try {
-  if (typeof window !== 'undefined' && firebaseConfig.measurementId) {
-    analyticsInstance = getAnalytics(app);
+
+(async () => {
+  try {
+    if (typeof window !== 'undefined' && firebaseConfig.measurementId) {
+      const { getAnalytics } = await import('firebase/analytics');
+      analyticsInstance = getAnalytics(app);
+    }
+  } catch (err) {
+    // Fail silently — analytics is optional.
+    // eslint-disable-next-line no-console
+    console.warn('Firebase analytics disabled:', err && err.message ? err.message : err);
   }
-} catch (err) {
-  // Fail silently — analytics is optional.
-  // eslint-disable-next-line no-console
-  console.warn('Firebase analytics disabled:', err && err.message ? err.message : err);
-}
+})();
 
 export const analytics = analyticsInstance;
 export const auth = getAuth(app);
