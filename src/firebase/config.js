@@ -15,7 +15,21 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-export const analytics = getAnalytics(app);
+
+// Analytics can fail in some environments (privacy blocks, missing window, etc.).
+// Initialize it defensively so a failure doesn't break the whole app.
+let analyticsInstance = null;
+try {
+  if (typeof window !== 'undefined' && firebaseConfig.measurementId) {
+    analyticsInstance = getAnalytics(app);
+  }
+} catch (err) {
+  // Fail silently — analytics is optional.
+  // eslint-disable-next-line no-console
+  console.warn('Firebase analytics disabled:', err && err.message ? err.message : err);
+}
+
+export const analytics = analyticsInstance;
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
