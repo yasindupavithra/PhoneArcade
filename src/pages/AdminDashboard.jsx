@@ -13,6 +13,7 @@ import ProductSearch from '../components/ProductSearch';
 import GsmarenaSpecFetcher from '../components/admin/GsmarenaSpecFetcher';
 import { productMatchesQuery } from '../utils/searchProducts';
 import { fetchGsmSpecs, applyGsmDataToForm } from '../utils/fetchGsmSpecs';
+import { PARTNER_BRANDS } from '../constants/brands';
 
 const categories = [
   { id: 'Mobile', label: 'Smartphones', icon: <Smartphone size={18} /> },
@@ -37,6 +38,7 @@ const AdminDashboard = () => {
   const [formData, setFormData] = useState({
     name: '',
     brand: '',
+    customBrand: '',
     price: '',
     originalPrice: '',
     image: '',
@@ -112,6 +114,16 @@ const AdminDashboard = () => {
       }
 
       let finalData = { ...formData };
+      if (finalData.brand === 'Other') {
+        if (!finalData.customBrand?.trim()) {
+          alert("Please enter a real brand name for 'Other'.");
+          setIsSaving(false);
+          return;
+        }
+        finalData.brand = finalData.customBrand.trim();
+      }
+      const { customBrand, ...persistData } = finalData;
+      finalData = persistData;
 
       const needsGsm =
         activeSection === 'Mobile' &&
@@ -157,7 +169,10 @@ const AdminDashboard = () => {
 
       setFormData({
         name: '',
+        name: '',
         brand: '',
+        customBrand: '',
+        customBrand: '',
         price: '',
         originalPrice: '',
         image: '',
@@ -312,12 +327,43 @@ const AdminDashboard = () => {
                     <label className="text-[11px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2 ml-1">
                       <Tag size={12} className="text-primary" /> Brand
                     </label>
-                    <input
-                      required value={formData.brand}
-                      onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
-                      placeholder="e.g. Apple"
-                      className="w-full px-5 py-4 rounded-2xl bg-slate-50 border-2 border-transparent focus:border-primary focus:bg-white focus:outline-none transition-all font-bold text-secondary text-sm placeholder:text-slate-300"
-                    />
+                    <div className="relative">
+                      <select
+                        required
+                        value={formData.brand}
+                        onChange={(e) => setFormData({
+                          ...formData,
+                          brand: e.target.value,
+                          customBrand: e.target.value === 'Other' ? '' : formData.customBrand,
+                        })}
+                        className="w-full px-5 py-4 rounded-2xl bg-slate-50 border-2 border-transparent focus:border-primary focus:bg-white focus:outline-none transition-all font-bold text-secondary text-sm appearance-none"
+                      >
+                        <option value="" disabled>
+                          Select phone brand
+                        </option>
+                        {PARTNER_BRANDS.map((brand) => (
+                          <option key={brand.id} value={brand.name}>
+                            {brand.name}
+                          </option>
+                        ))}
+                        {formData.brand && !PARTNER_BRANDS.some((brand) => brand.name === formData.brand) && formData.brand !== 'Other' ? (
+                          <option value={formData.brand}>{formData.brand}</option>
+                        ) : null}
+                        <option value="Other">Other</option>
+                      </select>
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                        <Tag size={16} />
+                      </div>
+                    </div>
+                    {formData.brand === 'Other' && (
+                      <input
+                        required
+                        value={formData.customBrand}
+                        onChange={(e) => setFormData({ ...formData, customBrand: e.target.value })}
+                        placeholder="Enter custom brand name"
+                        className="w-full px-5 py-4 rounded-2xl bg-slate-50 border-2 border-transparent focus:border-primary focus:bg-white focus:outline-none transition-all font-bold text-secondary text-sm placeholder:text-slate-300"
+                      />
+                    )}
                   </div>
                   {/* Category */}
                   <div className="space-y-2">
@@ -444,6 +490,7 @@ const AdminDashboard = () => {
                         setFormData({
                           name: '',
                           brand: '',
+                          customBrand: '',
                           price: '',
                           originalPrice: '',
                           image: '',
